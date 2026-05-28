@@ -1,0 +1,42 @@
+# Build outputs
+build/
+dist/
+*.o
+*.a
+*.so
+*.elf
+*.bin
+*.hex
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# KiCad
+*.kicad_pcb-bak
+*.sch-bak
+fp-info-cache
+*.000
+
+# CAD
+*.bak
+*.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.env
+secrets.yaml
+credentials.json
