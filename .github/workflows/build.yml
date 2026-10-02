@@ -1,0 +1,40 @@
+# Minimal build CI for eos-aero.
+# The web app (AeroSwift/software/web_app) is pnpm + Vite + TypeScript;
+# aeros_ai ships two standalone Python files. No test infra exists yet,
+# so this validates typecheck + production build + py_compile.
+# Code review is handled by the daily improvement loop, not bots.
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: AeroSwift/software/web_app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.4.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: AeroSwift/software/web_app/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm build
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m py_compile AeroSwift-Transit/software/aeros_ai/energy_optimizer.py AeroSwift-Personal/software/aeros_ai/energy_optimizer.py
