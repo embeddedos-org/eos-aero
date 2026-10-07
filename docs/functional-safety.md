@@ -97,3 +97,27 @@ This doc creates no certification, no DAL/ASIL assignment, and no safety
 argument. It is the scaffolding the argument will hang on. Any claim of the
 form "eos-aero is safe" remains false until the hazard log, requirements,
 and evidence exist.
+
+
+## ZDS 2026 Day 1 digest (2026-10-07)
+
+Zephyr Developer Summit 2026 (Prague, Oct 7–9) opened today with 40+
+sessions and 45+ speakers across functional safety, CRA readiness, and
+automotive/space/industrial tracks.
+
+- **First-ever Zephyr Community Awards** were announced today. Follow-up
+  item for tomorrow: record the winners here once published — award
+  categories signal what the community (and its commercial users) value most.
+- **Space Cubics** joined as a new Silver member — a commercial-space RTOS
+  demand signal worth watching; real flight heritage moves Zephyr (and eos)
+  from lab to launch.
+- **80-TOPS local inference is desktop commodity**: ASUS's Ascent QN10
+  (and the Dimensity-9600-class dual-NPU phones landing this quarter) mean
+  on-device inference is the expected baseline, not an exotic option.
+  `docs/silicon-targets.md` should frame it that way: aero silicon targets
+  are chosen assuming local inference exists, and the safety story covers it.
+
+Sessions mined today skew heavily to functional-safety evidence formats —
+hazard logs, requirements traceability, and what assessors actually flag.
+That feeds directly back into this doc's scaffolding: the hazard-log format
+question ("what would an assessor flag?") remains the open item.
