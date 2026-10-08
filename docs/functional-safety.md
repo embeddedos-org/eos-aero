@@ -121,3 +121,25 @@ Sessions mined today skew heavily to functional-safety evidence formats —
 hazard logs, requirements traceability, and what assessors actually flag.
 That feeds directly back into this doc's scaffolding: the hazard-log format
 question ("what would an assessor flag?") remains the open item.
+
+## ZDS 2026 Day 2 digest (2026-10-08)
+
+Day 2 centered on functional safety and CRA readiness -- the two tracks
+this doc exists for.
+
+- **Functional-safety evidence formats** dominated: hazard logs,
+  requirements traceability, and assessor-flagged gaps. The takeaway for
+  this doc's scaffolding: an assessor wants the hazard log to show not
+  just identified hazards but the *reasoning that closed each one* --
+  the "why this is safe" column, not just the "what could go wrong"
+  column.
+- **CRA readiness** sessions framed the 24h/72h/14d reporting duties
+  (live since 11 Sept 2026) for embedded products. Aerospace is in
+  scope; the eSec CRA incident-reporting runbook is the org's answer,
+  and this doc should cross-reference it rather than duplicate it.
+- **Dual-brain safety pattern**: the Bluemag Pi (SiFive E3+E2, added to
+  `docs/silicon-targets.md` today) is the industry's current answer to
+  "where does the AI live in a safety-critical system" -- flight-critical
+  control on one core, AI/system tasks on the other, with a hard
+  boundary. That boundary is the safety case's best friend: the AI
+  core's failures are contained by architecture, not by testing.

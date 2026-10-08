@@ -33,6 +33,7 @@ A flight-rated AI accelerator exists now — verified 2026-10-05.
 |---|---|---|---|
 | AMD XQRVC1902 | In-orbit AI compute | Sampling; Class Y in progress; flight H2 2027 | Headline target above |
 | TI / Infineon space-grade MCUs | Flight computer, power | Vendors are Zephyr Summit Platinum sponsors (see below) | Evaluate at the summit |
+| Upbeat Bluemag Pi | COTS dual-brain reference | Announced Oct 2026; CEATEC demo Oct 13–16 | SiFive E3 (flight-critical) + E2 (AI/system): the dual-brain pattern in silicon. COTS reference for the deterministic/AI split, not a flight part |
 
 Keep this table short: a target earns a row when it has a verified
 qualification path or a sampling program, not a press release.
