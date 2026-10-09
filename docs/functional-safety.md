@@ -143,3 +143,24 @@ this doc exists for.
   control on one core, AI/system tasks on the other, with a hard
   boundary. That boundary is the safety case's best friend: the AI
   core's failures are contained by architecture, not by testing.
+
+## Commercial benchmark: DAL-A on a credit card (2026-10-07)
+
+**Northrop Grumman Italia + DDC-I Deos** (announced Oct 7): a
+credit-card A53 SBC running DDC-I's Deos RTOS, shipping with **full
+DO-178C/DO-254 DAL-A artifacts, FACE-conformant**. This is the named
+commercial platform this doc's safety case measures against:
+
+- **DAL A is shippable on COTS SBCs now.** The argument "DAL-A
+  evidence is too expensive for our form factor" no longer holds —
+  someone ships it on a credit card.
+- **The artifacts are the product.** What they sell is not just the
+  board but the certification evidence (traceability, coverage,
+  verification) — exactly the structure this doc's hazard-analysis
+  and traceability sections scaffold.
+- **FACE conformance** matters for the software-architecture side:
+  portable, conformant software components are part of the safety
+  argument, not just the hardware.
+- For eos-aero's own safety case, the bar is now concrete: match the
+  *shape* of this evidence (hazard log → requirements → traceability
+  → verification artifacts), scoped to our vehicle classes.
