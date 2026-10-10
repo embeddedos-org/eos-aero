@@ -34,7 +34,8 @@ A flight-rated AI accelerator exists now — verified 2026-10-05.
 | AMD XQRVC1902 | In-orbit AI compute | Sampling; Class Y in progress; flight H2 2027 | Headline target above |
 | TI / Infineon space-grade MCUs | Flight computer, power | Vendors are Zephyr Summit Platinum sponsors (see below) | Evaluate at the summit |
 | Upbeat Bluemag Pi | COTS dual-brain reference | Announced Oct 2026; CEATEC demo Oct 13–16 | SiFive E3 (flight-critical) + E2 (AI/system): the dual-brain pattern in silicon. COTS reference for the deterministic/AI split, not a flight part |
-| D-Robotics S100P | COTS safety-compute reference | Announced Oct 2026 | 6×Cortex-A78AE (safety-capable) + 4×Cortex-R52+ in DCLS (dual-core lockstep): the dual-brain *safety* split in silicon — performance cores plus lockstep safety cores on one part. Second COTS reference for the safety architecture, alongside Bluemag Pi |
+| D-Robotics S100P | COTS safety-compute reference | Announced Oct 2026 | 6×Cortex-A78AE (safety-capable) + 4×Cortex-R52+ in DCL |
+| NXP i.MX RT1186 (FRDM-IMXRT1186) | Deterministic networking reference | Board launched Sept 2026 | Crossover MCU (800 MHz M7 + 300 MHz M33) with dual GbE TSN switching + dual Fast Ethernet EtherCAT/TSN — the affordable TSN endpoint/bridge reference for deterministic avionics-adjacent networking; pairs with the eNet TSN lane |S (dual-core lockstep): the dual-brain *safety* split in silicon — performance cores plus lockstep safety cores on one part. Second COTS reference for the safety architecture, alongside Bluemag Pi |
 
 Keep this table short: a target earns a row when it has a verified
 qualification path or a sampling program, not a press release.
