@@ -36,6 +36,7 @@ A flight-rated AI accelerator exists now — verified 2026-10-05.
 | Upbeat Bluemag Pi | COTS dual-brain reference | Announced Oct 2026; CEATEC demo Oct 13–16 | SiFive E3 (flight-critical) + E2 (AI/system): the dual-brain pattern in silicon. COTS reference for the deterministic/AI split, not a flight part |
 | D-Robotics S100P | COTS safety-compute reference | Announced Oct 2026 | 6×Cortex-A78AE (safety-capable) + 4×Cortex-R52+ in DCL |
 | NXP i.MX RT1186 (FRDM-IMXRT1186) | Deterministic networking reference | Board launched Sept 2026 | Crossover MCU (800 MHz M7 + 300 MHz M33) with dual GbE TSN switching + dual Fast Ethernet EtherCAT/TSN — the affordable TSN endpoint/bridge reference for deterministic avionics-adjacent networking; pairs with the eNet TSN lane |S (dual-core lockstep): the dual-brain *safety* split in silicon — performance cores plus lockstep safety cores on one part. Second COTS reference for the safety architecture, alongside Bluemag Pi |
+| NXP Ara240 DNPU | COTS edge-AI compute reference | Shipping (Mouser, Oct 2026) | 40 eTOPS discrete NPU, PCIe Gen4/USB, ~6.6 W, secure boot + HW RoT — the affordable COTS reference for on-board AI compute; pairs with Track-1 accelerator-HAL large tier |
 
 Keep this table short: a target earns a row when it has a verified
 qualification path or a sampling program, not a press release.
