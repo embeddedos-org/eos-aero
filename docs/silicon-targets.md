@@ -37,6 +37,7 @@ A flight-rated AI accelerator exists now — verified 2026-10-05.
 | D-Robotics S100P | COTS safety-compute reference | Announced Oct 2026 | 6×Cortex-A78AE (safety-capable) + 4×Cortex-R52+ in DCL |
 | NXP i.MX RT1186 (FRDM-IMXRT1186) | Deterministic networking reference | Board launched Sept 2026 | Crossover MCU (800 MHz M7 + 300 MHz M33) with dual GbE TSN switching + dual Fast Ethernet EtherCAT/TSN — the affordable TSN endpoint/bridge reference for deterministic avionics-adjacent networking; pairs with the eNet TSN lane |S (dual-core lockstep): the dual-brain *safety* split in silicon — performance cores plus lockstep safety cores on one part. Second COTS reference for the safety architecture, alongside Bluemag Pi |
 | NXP Ara240 DNPU | COTS edge-AI compute reference | Shipping (Mouser, Oct 2026) | 40 eTOPS discrete NPU, PCIe Gen4/USB, ~6.6 W, secure boot + HW RoT — the affordable COTS reference for on-board AI compute; pairs with Track-1 accelerator-HAL large tier |
+| Nordic nRF54LC10A | Low-power connectivity / telemetry reference | Announced Oct 2026 | 128 MHz Cortex-M33 + RISC-V coprocessor, 1 MB NVM / 192 KB RAM, BLE 6.x with Channel Sounding, 802.15.4 (Thread/Zigbee/Matter), sub-50 nA hibernate — the connectivity reference the shortlist lacked; a telemetry/beacon-class part, not a flight-compute target |
 
 Keep this table short: a target earns a row when it has a verified
 qualification path or a sampling program, not a press release.
