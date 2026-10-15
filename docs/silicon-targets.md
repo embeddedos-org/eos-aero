@@ -63,3 +63,16 @@ The summit is two days out. Mine it for the two decisions this doc and
 
 Output: a dated summit-notes file under `docs/` within a week of the
 event, with concrete follow-ups (not a trip report).
+
+## Watchlist — not yet rows (added 2026-10-15)
+
+Named here so the shortlist above stays honest about what is a
+tracked target and what is only a reference point:
+
+- **MediaTek Genio 720** — comms/inference reference silicon, not
+  an aero target row. Its canonical roster entry lives in eAI's
+  silicon roster (Genio family section), and the board-level
+  watchlist entry (a Genio 720 eval board) lives in
+  eCAD-Hardware-Products' Incoming list. eos-aero cites it only
+  where a comms or inference comparison needs the reference; it
+  gets a row here only if an aero program actually selects it.
