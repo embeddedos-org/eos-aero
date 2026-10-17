@@ -1,0 +1,20 @@
+# eos-aero
+
+> llms.txt for the eos-aero repository (embeddedos-org/eos-aero).
+> Status: the aerospace vertical of EmbeddedOS — a web
+> application plus the aeros_ai package, with a silicon-target
+> roster maintained against functional-safety requirements.
+
+eos-aero applies the EmbeddedOS platform to aerospace use:
+safety-fragment-aware silicon selection (redundancy, lockstep,
+radiation posture) and the sector's functional-safety record.
+
+## Docs
+
+- [Functional safety — knowledge-base seed](docs/functional-safety.md)
+- [Silicon targets — knowledge-base seed](docs/silicon-targets.md)
+
+## Machine-readable
+
+- [llms.txt](llms.txt) — this file
+- [llms-full.txt](llms-full.txt) — the docs above concatenated as one document
