@@ -1,12 +1,12 @@
 """
 AeroOS AI Energy Optimizer
-AeroSwift-Personal (AS-1/2)
+AeroSwift-Transit (AS-10)
 
 Copyright (c) 2026 American Group LLC. All Rights Reserved.
 Patents Pending.
 
 This module implements the AI-assisted energy optimization engine for the
-AeroSwift-Personal. It runs on the Rockchip RK3588S NPU at 10 Hz and is
+AeroSwift-Transit. It runs on the Rockchip RK3588S NPU at 10 Hz and is
 responsible for:
   1. Wind map prediction and thermal updraft detection
   2. Dynamic motor RPM scheduling to minimize energy consumption
@@ -151,10 +151,11 @@ class EnergyOptimizer:
     Runs at 10 Hz on the RK3588S NPU.
     """
 
-    # Aerodynamic constants for AeroSwift-Personal
-    MTOW_KG            = 850.0
-    WING_AREA_M2       = 12.0
-    ASPECT_RATIO       = 8.2 / 1.5    # wingspan / mean chord
+    # Airframe constants for AeroSwift-Transit (README "Key Specifications")
+    MTOW_KG            = 4200.0
+    WING_AREA_M2       = 48.0
+    ASPECT_RATIO       = 18.5 ** 2 / 48.0    # wingspan^2 / wing area
+    NUM_VTOL_MOTORS    = 12
     OSWALD_EFFICIENCY  = 0.85
     CD0                = 0.025         # Zero-lift drag coefficient
     RHO_SEA_LEVEL      = 1.225         # kg/m³
@@ -203,7 +204,7 @@ class EnergyOptimizer:
         optimal_alt = 1500.0 if energy.battery_soc_pct > 30 else 800.0
 
         # Compute VTOL RPM targets (all zero during cruise)
-        vtol_rpms = [0] * 8
+        vtol_rpms = [0] * self.NUM_VTOL_MOTORS
 
         # Compute cruise RPM target based on desired speed
         # Simplified: RPM scales linearly with desired airspeed
