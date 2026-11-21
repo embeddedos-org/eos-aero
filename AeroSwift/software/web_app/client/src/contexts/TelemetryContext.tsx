@@ -52,6 +52,56 @@ const TelemetryContext = createContext<TelemetryContextType | undefined>(undefin
 const SF_COORDS = { lat: 37.7749, lng: -122.4194 };
 const SFO_COORDS = { lat: 37.6213, lng: -122.3790 };
 
+// One 1 s tick of the takeoff, transition and landing phases, shared by
+// both vehicles (CRUISE differs per model and is handled by the caller).
+// Mutates the copy it is given.
+function stepVerticalPhases(v: VehicleState, addLog: (msg: string) => void) {
+  if (v.phase === "VTOL_TAKEOFF") {
+    v.altitude += 2.5;
+    v.vertical_speed = 2.5;
+    v.motor_power = 240000; // 240 kW
+    v.battery_soc -= 0.05;
+    if (v.altitude >= 100) {
+      v.phase = "TRANSITION_UP";
+      addLog(`${v.model}: Altitude target reached. Initiating TRANSITION_UP.`);
+    }
+  } else if (v.phase === "TRANSITION_UP") {
+    v.airspeed += 5;
+    v.motor_power = 180000;
+    v.battery_soc -= 0.03;
+    if (v.airspeed >= 120) {
+      v.phase = "CRUISE";
+      v.vertical_speed = 0;
+      v.wing_folded = false;
+      addLog(`${v.model}: Transition complete. Wings fully extended. Entering CRUISE.`);
+    }
+  } else if (v.phase === "TRANSITION_DOWN") {
+    v.airspeed -= 6;
+    v.motor_power = 80000;
+    v.battery_soc -= 0.02;
+    if (v.airspeed <= 40) {
+      v.phase = "VTOL_LAND";
+      v.wing_folded = true;
+      addLog(`${v.model}: Cruise speed shed. Wings folded. Entering VTOL_LAND.`);
+    }
+  } else if (v.phase === "VTOL_LAND") {
+    v.altitude -= 1.5;
+    v.vertical_speed = -1.5;
+    v.motor_power = 220000;
+    v.battery_soc -= 0.04;
+    if (v.altitude <= 0) {
+      v.altitude = 0;
+      v.vertical_speed = 0;
+      v.airspeed = 0;
+      v.motor_power = 0;
+      v.solar_power = 0;
+      v.phase = "SHUTDOWN";
+      v.is_armed = false;
+      addLog(`${v.model}: Safe landing confirmed. Propulsion systems disarmed.`);
+    }
+  }
+}
+
 export const TelemetryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [selectedModel, setSelectedModel] = useState<VehicleModel>("AS-1/2");
   const [logMessages, setLogMessages] = useState<string[]>(["[SYSTEM] AeroOS API Gateway connected.", "[SYSTEM] Authenticated as AmericanGroupLLC Owner."]);
@@ -119,26 +169,7 @@ export const TelemetryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         const as1 = { ...updated["AS-1/2"] };
         if (as1.phase !== "SHUTDOWN" && as1.phase !== "PREFLIGHT") {
           // Dynamic simulation based on phase
-          if (as1.phase === "VTOL_TAKEOFF") {
-            as1.altitude += 2.5;
-            as1.vertical_speed = 2.5;
-            as1.motor_power = 240000; // 240 kW
-            as1.battery_soc -= 0.05;
-            if (as1.altitude >= 100) {
-              as1.phase = "TRANSITION_UP";
-              addLog("AS-1/2: Altitude target reached. Initiating TRANSITION_UP.");
-            }
-          } else if (as1.phase === "TRANSITION_UP") {
-            as1.airspeed += 5;
-            as1.motor_power = 180000;
-            as1.battery_soc -= 0.03;
-            if (as1.airspeed >= 120) {
-              as1.phase = "CRUISE";
-              as1.vertical_speed = 0;
-              as1.wing_folded = false;
-              addLog("AS-1/2: Transition complete. Wings fully extended. Entering CRUISE.");
-            }
-          } else if (as1.phase === "CRUISE") {
+          if (as1.phase === "CRUISE") {
             as1.airspeed = 180 + Math.sin(Date.now() / 5000) * 2;
             as1.motor_power = 18000; // 18 kW cruise
             as1.solar_power = 2800 + Math.cos(Date.now() / 10000) * 200;
@@ -156,34 +187,13 @@ export const TelemetryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
               as1.phase = "TRANSITION_DOWN";
               addLog("AS-1/2: Destination waypoint reached. Initiating TRANSITION_DOWN.");
             }
-          } else if (as1.phase === "TRANSITION_DOWN") {
-            as1.airspeed -= 6;
-            as1.motor_power = 80000;
-            as1.battery_soc -= 0.02;
-            if (as1.airspeed <= 40) {
-              as1.phase = "VTOL_LAND";
-              as1.wing_folded = true;
-              addLog("AS-1/2: Cruise speed shed. Wings folded. Entering VTOL_LAND.");
-            }
-          } else if (as1.phase === "VTOL_LAND") {
-            as1.altitude -= 1.5;
-            as1.vertical_speed = -1.5;
-            as1.motor_power = 220000;
-            as1.battery_soc -= 0.04;
-            if (as1.altitude <= 0) {
-              as1.altitude = 0;
-              as1.vertical_speed = 0;
-              as1.airspeed = 0;
-              as1.motor_power = 0;
-              as1.solar_power = 0;
-              as1.phase = "SHUTDOWN";
-              as1.is_armed = false;
-              addLog("AS-1/2: Safe landing confirmed. Propulsion systems disarmed.");
-            }
+          } else {
+            stepVerticalPhases(as1, addLog);
           }
         }
 
-        // Simulate AS-10 (Transit) — always cruising back and forth in our simulation
+        // Simulate AS-10 (Transit) — shuttles back and forth while in CRUISE; the
+        // other flight phases (e.g. after EMERGENCY_LAND) step as for AS-1/2
         const as10 = { ...updated["AS-10"] };
         if (as10.phase === "CRUISE") {
           as10.airspeed = 240 + Math.sin(Date.now() / 4000) * 3;
@@ -213,6 +223,8 @@ export const TelemetryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
               addLog("AS-10: Downtown SF Vertiport arrival. Commencing return shuttle flight.");
             }
           }
+        } else if (as10.phase !== "SHUTDOWN" && as10.phase !== "PREFLIGHT") {
+          stepVerticalPhases(as10, addLog);
         }
 
         updated["AS-1/2"] = as1;
