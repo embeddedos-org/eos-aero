@@ -284,7 +284,7 @@ export const TelemetryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           addLog(`${selectedModel}: EMERGENCY LANDING initiated. Descending immediately.`);
           break;
         case "CLIMATE":
-          if (params?.temp) {
+          if (typeof params?.temp === "number") {
             vehicle.cabin_temp = params.temp;
             addLog(`${selectedModel}: Cabin climate set to ${params.temp}°C.`);
           }
