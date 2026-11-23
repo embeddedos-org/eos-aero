@@ -1,7 +1,8 @@
 # Minimal build CI for eos-aero.
 # The web app (AeroSwift/software/web_app) is pnpm + Vite + TypeScript;
-# aeros_ai ships two standalone Python files. No test infra exists yet,
-# so this validates typecheck + production build + py_compile.
+# aeros_ai ships two standalone Python files per airframe, each with a
+# pytest suite alongside it. This validates typecheck + production build,
+# py_compile, and the aeros_ai tests.
 # Code review is handled by the daily improvement loop, not bots.
 name: Build
 
@@ -38,3 +39,10 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m py_compile AeroSwift-Transit/software/aeros_ai/energy_optimizer.py AeroSwift-Personal/software/aeros_ai/energy_optimizer.py
+      - run: pip install numpy pytest
+      # Both aeros_ai directories hold a module named energy_optimizer, so
+      # they are collected in one session by path; the test files load their
+      # own module by path to keep the two apart.
+      # pytest exits 5 when it collects nothing, so an empty or mis-pathed
+      # suite fails this job instead of reporting green.
+      - run: pytest AeroSwift-Personal/software/aeros_ai AeroSwift-Transit/software/aeros_ai
