@@ -158,6 +158,7 @@ class EnergyOptimizer:
     OSWALD_EFFICIENCY  = 0.85
     CD0                = 0.025         # Zero-lift drag coefficient
     RHO_SEA_LEVEL      = 1.225         # kg/m³
+    MAX_CRUISE_SPEED_MS = 180.0 / 3.6  # 180 km/h (README "Max Cruise Speed")
 
     def __init__(self):
         self.wind_predictor  = WindPredictor()
@@ -175,7 +176,7 @@ class EnergyOptimizer:
             (2 * self.MTOW_KG * 9.81) /
             (rho * self.WING_AREA_M2 * cl_opt)
         ) * 1.316  # Carson's factor: 1.316 × V_md
-        return float(np.clip(v_best_range, 30.0, 55.0))  # Clamp to safe envelope
+        return float(np.clip(v_best_range, 30.0, self.MAX_CRUISE_SPEED_MS))  # Clamp to safe envelope
 
     def optimize(
         self,
