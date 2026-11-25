@@ -52,6 +52,15 @@ const TelemetryContext = createContext<TelemetryContextType | undefined>(undefin
 const SF_COORDS = { lat: 37.7749, lng: -122.4194 };
 const SFO_COORDS = { lat: 37.6213, lng: -122.3790 };
 
+// CRUISE ends once a vehicle is this close to its target (degrees).
+const ARRIVAL_RADIUS_DEG = 0.001;
+
+function isAt(v: VehicleState, place: { lat: number; lng: number }) {
+  const dLat = place.lat - v.lat;
+  const dLng = place.lng - v.lng;
+  return Math.sqrt(dLat * dLat + dLng * dLng) <= ARRIVAL_RADIUS_DEG;
+}
+
 // One 1 s tick of the takeoff, transition and landing phases, shared by
 // both vehicles (CRUISE differs per model and is handled by the caller).
 // Mutates the copy it is given.
@@ -178,7 +187,7 @@ export const TelemetryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             const dLat = as1.target_lat - as1.lat;
             const dLng = as1.target_lng - as1.lng;
             const dist = Math.sqrt(dLat * dLat + dLng * dLng);
-            if (dist > 0.001) {
+            if (dist > ARRIVAL_RADIUS_DEG) {
               as1.lat += (dLat / dist) * 0.0002;
               as1.lng += (dLng / dist) * 0.0002;
               as1.heading = (Math.atan2(dLng, dLat) * 180) / Math.PI;
@@ -204,7 +213,7 @@ export const TelemetryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           const dLat = as10.target_lat - as10.lat;
           const dLng = as10.target_lng - as10.lng;
           const dist = Math.sqrt(dLat * dLat + dLng * dLng);
-          if (dist > 0.001) {
+          if (dist > ARRIVAL_RADIUS_DEG) {
             as10.lat += (dLat / dist) * 0.0003;
             as10.lng += (dLng / dist) * 0.0003;
             as10.heading = (Math.atan2(dLng, dLat) * 180) / Math.PI;
@@ -276,9 +285,10 @@ export const TelemetryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           } else {
             vehicle.phase = "VTOL_TAKEOFF";
             vehicle.wing_folded = true;
-            // Set target SFO if starting SF
-            vehicle.target_lat = SFO_COORDS.lat;
-            vehicle.target_lng = SFO_COORDS.lng;
+            // Fly back to SF from SFO; from anywhere else, fly to SFO
+            const dest = isAt(vehicle, SFO_COORDS) ? SF_COORDS : SFO_COORDS;
+            vehicle.target_lat = dest.lat;
+            vehicle.target_lng = dest.lng;
             addLog(`${selectedModel}: Takeoff initiated! VTOL Lift Motors engaged.`);
           }
           break;
