@@ -2,7 +2,7 @@
 # The web app (AeroSwift/software/web_app) is pnpm + Vite + TypeScript;
 # aeros_ai ships two standalone Python files per airframe, each with a
 # pytest suite alongside it. This validates typecheck + production build,
-# py_compile, and the aeros_ai tests.
+# the vitest suites, py_compile, and the aeros_ai tests.
 # Code review is handled by the daily improvement loop, not bots.
 name: Build
 
@@ -29,6 +29,14 @@ jobs:
           cache-dependency-path: AeroSwift/software/web_app/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
+      # The client vitest suites (TelemetryContext.test.ts from #8,
+      # TelemetryClimate.test.ts from #10) existed on master but nothing ran
+      # them, so the fixes they pin could have regressed silently.
+      # `vitest run` exits 1 when it collects no test files, so a suite that
+      # is deleted or moved out from under this step fails the job instead of
+      # reporting green -- the same fail-closed property as the pytest step
+      # below.
+      - run: pnpm test
       - run: pnpm build
 
   python:
