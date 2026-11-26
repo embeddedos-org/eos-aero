@@ -32,6 +32,8 @@ The Web App serves as the **Fleet Control & Operations Center**, optimized for d
    * Large 3D render/visual of the selected vehicle (AS-1/2 or AS-10) with live status overlay.
    * State of Charge (SoC) indicator with remaining range (km) and solar harvesting power (W).
    * Primary Action buttons: **Power On**, **Arm System**, **Takeoff**, **Return to Home (RTH)**, **Emergency Land**.
+   * **Command interlock — DISARM is refused in flight.** Disarming cuts propulsion, so the dashboard rejects a DISARM command while the vehicle's reported altitude is above 0 m. The command is not sent, vehicle state is unchanged, and the telemetry log records `ERROR - Cannot disarm in flight. Land first (EMERGENCY DESCENT).`
+     * **Recovery path:** bring the vehicle down first with **Return to Home (RTH)** or **Emergency Land**, wait for reported altitude to reach 0 m, then issue **DISARM**.
 2. **Live Map & Telemetry:**
    * Interactive 3D map (Mapbox GL/Leaflet) showing the vehicle's real-time position, flight path, and target waypoint.
    * Side panel with live flight telemetry: Airspeed (km/h), Altitude (m), Vertical Speed (m/s), Wind Speed (m/s), Motor Temperatures (°C), and Battery Voltage (V).
