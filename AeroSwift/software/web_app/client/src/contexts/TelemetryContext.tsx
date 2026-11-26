@@ -272,6 +272,12 @@ export const TelemetryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           }
           break;
         case "DISARM":
+          // Disarming cuts propulsion, and the branch below puts the vehicle
+          // on the ground; only do that once it is on the ground.
+          if (vehicle.altitude > 0) {
+            addLog(`${selectedModel}: ERROR - Cannot disarm in flight. Land first (EMERGENCY DESCENT).`);
+            break;
+          }
           vehicle.is_armed = false;
           vehicle.phase = "SHUTDOWN";
           vehicle.airspeed = 0;
